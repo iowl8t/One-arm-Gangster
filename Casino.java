@@ -4,40 +4,43 @@ import java.util.Random;
 import static java.lang.System.exit;
 
 
-public class Casino {
+abstract public class Casino implements GlobalCasino {
     private int money;
-    final private int maxRandValue = 7;
-    private int[] randValuesAr = new int[3];
-    final private int jackpotIndex = 6;
-    final private int penaltyIndex = 11;
-    final private int[] priseAr = {1100, 1000, 900, 800, 700, 600, 500, 200, 100, 30, 25, 1000};
-    final private int[][] priseCombinationsAr = {
-            {0, 0, 0},
-            {1, 1, 1},
-            {2, 2, 2},
-            {3, 3, 3},
-            {4, 4, 4},
-            {5, 5, 5},
-            {7, 7, 7},
-            {7, 7},
-            {5, 5},
-            {5},
-            {7},
-            {6, 6, 6}
-    };
+    final private int minBet;
 
-    Casino() {
-        money = 5000;
+    final private int maxRandValue;
+    private int[] randValuesAr;
+
+    final private int jackpotIndex;
+    final private int penaltyIndex;
+
+    private int[] priseAr;
+    private int[][] priseCombinationsAr;
+
+    Casino(int money, int maxRandValue, int lengthOfRandValuesAr, int jackpotIndex, int penaltyIndex, int minBet, int[] priseAr, int[][] priseCombinationsAr) {
+        this.money = money;
+        this.maxRandValue = maxRandValue;
+        this.randValuesAr = new int[lengthOfRandValuesAr];
+        this.jackpotIndex = jackpotIndex;
+        this.penaltyIndex = penaltyIndex;
+        this.minBet = minBet;
+        this.priseAr = priseAr;
+        this.priseCombinationsAr = priseCombinationsAr;
     }
 
-    //Fill randValuesAr[3] with random values from 0 to maxRandValue
+    public void welcomeWords() {
+        System.out.println("Welcome to Casino!");
+    }
+
+    //Fill randValuesAr[] with random values from 0 to maxRandValue
     private void makeRandValues() {
         Random r = new Random();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < randValuesAr.length; i++)
             randValuesAr[i] = r.nextInt(maxRandValue + 1);
 
-        for (int i = 0; i < 3; i++)
-            System.out.print(randValuesAr[i]);
+        System.out.print("Random combination: ");
+        for (int i = 0; i < randValuesAr.length; i++)
+            System.out.print(randValuesAr[i] + " ");
         System.out.print('\n');
     }
 
@@ -74,11 +77,11 @@ public class Casino {
 
     //Call it to do player's move
     public void step() {
-        if (this.money < 200) {
+        if (money < minBet) {
             System.out.println("You have no money. Game over.");
             exit(0);
         }
-        money -= 200;
+        money -= minBet;
         makeRandValues();
         comparison();
         System.out.println("You have " + money + "grn.\n");

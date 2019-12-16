@@ -8,16 +8,17 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
-        Casino casino = new Casino();
+        DeceptivePlace placeP = new DeceptivePlace();
+
+        placeP.welcomeWords();
         do {
             char ch;
             String s = "p";
             System.out.print("To play press \"p\": ");
-            while(!s.equals(in.next()));
+            while (!s.equals(in.next())) ;
 
-            casino.step();
+            placeP.step();
 
-        }while(true);
-
+        } while (true);
     }
 }
